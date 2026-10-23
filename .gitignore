@@ -1,0 +1,9 @@
+node_modules/
+typescript/dist/
+__pycache__/
+*.py[cod]
+java/*.class
+sql/*.db
+sql/*.db-journal
+sql/*.sqlite
+sql/*.sqlite3
