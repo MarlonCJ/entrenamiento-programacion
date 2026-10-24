@@ -1,20 +1,52 @@
 /*
-BASE DE PRACTICA (PREPARACION, NO ES UN TEMA)
+================================================================================
+BASE DE PRÁCTICA SQL (PREPARACIÓN DEL ENTORNO - NO ES UN TEMA)
+================================================================================
 
-Ejecuta este archivo una vez en una base de datos SQLite vacia antes de
-practicar los temas 01-24. Crea tablas y datos ficticios que se reutilizan
-en los ejemplos y enunciados. Se puede ejecutar de nuevo: IF NOT EXISTS e
-INSERT OR IGNORE evitan reemplazar las tablas o duplicar los identificadores.
-No contiene datos personales.
+1. ¿QUÉ ES ESTE ARCHIVO Y POR QUÉ IMPORTA?
+--------------------------------------------------------------------------------
+Este script construye el ecosistema de datos (esquema + datos semilla) sobre el
+cual practicarás los temas 01 al 24. Está diseñado con tres dominios del mundo
+real para que puedas entrenar desde consultas simples hasta reportes complejos:
+
+  A) DOMINIO E-COMMERCE / TIENDA:
+     - categorias (1) ----< (N) productos
+     - clientes   (1) ----< (N) pedidos (1) ----< (N) detalle_pedido >---- (1) productos
+
+  B) DOMINIO ACADÉMICO / EDUCACIÓN:
+     - estudiantes (1) ----< (N) matriculas >---- (1) cursos
+     - estudiantes (1) ----< (N) resultados >---- (1) cursos
+
+  C) DOMINIO RECURSOS HUMANOS (RRHH):
+     - departamentos (1) ----< (N) empleados
+
+2. ¿CÓMO EJECUTARLO?
+--------------------------------------------------------------------------------
+- Desde terminal con SQLite CLI:
+    sqlite3 practica.db < 00_base_practica.sql
+- Desde VS Code (extensión SQLite / SQLTools) o DB Browser for SQLite:
+    Abre este archivo y ejecuta todo el script.
+
+Es 100% IDEMPOTENTE: usa `CREATE TABLE IF NOT EXISTS` e `INSERT OR IGNORE`, por
+lo que puedes volver a ejecutarlo en cualquier momento para restaurar los datos
+originales sin duplicar identificadores ni romper tablas existentes.
+================================================================================
 */
 
+-- Activa la verificación de integridad referencial en SQLite (vital en cada conexión)
 PRAGMA foreign_keys = ON;
 
+-- =============================================================================
+-- 1. ESQUEMA DE TABLAS (DDL - Data Definition Language)
+-- =============================================================================
+
+-- Dominio E-Commerce: Categorías de catálogo
 CREATE TABLE IF NOT EXISTS categorias (
     id INTEGER PRIMARY KEY,
     nombre TEXT NOT NULL UNIQUE
 );
 
+-- Dominio E-Commerce: Catálogo de productos con validación de precio, stock y estado booleano (0/1)
 CREATE TABLE IF NOT EXISTS productos (
     id INTEGER PRIMARY KEY,
     nombre TEXT NOT NULL UNIQUE,
@@ -25,6 +57,7 @@ CREATE TABLE IF NOT EXISTS productos (
     descripcion TEXT
 );
 
+-- Dominio E-Commerce: Directorio de clientes (incluye campos anulables para practicar IS NULL)
 CREATE TABLE IF NOT EXISTS clientes (
     id INTEGER PRIMARY KEY,
     nombre TEXT NOT NULL,
@@ -34,6 +67,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     ciudad TEXT
 );
 
+-- Dominio E-Commerce: Cabecera de órdenes de compra
 CREATE TABLE IF NOT EXISTS pedidos (
     id INTEGER PRIMARY KEY,
     cliente_id INTEGER NOT NULL REFERENCES clientes(id),
@@ -42,6 +76,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
     total REAL NOT NULL CHECK (total >= 0)
 );
 
+-- Dominio E-Commerce: Líneas de pedido (relación muchos a muchos con clave primaria compuesta)
 CREATE TABLE IF NOT EXISTS detalle_pedido (
     pedido_id INTEGER NOT NULL REFERENCES pedidos(id),
     producto_id INTEGER NOT NULL REFERENCES productos(id),
@@ -50,6 +85,7 @@ CREATE TABLE IF NOT EXISTS detalle_pedido (
     PRIMARY KEY (pedido_id, producto_id)
 );
 
+-- Dominio Académico: Alumnos registrados
 CREATE TABLE IF NOT EXISTS estudiantes (
     id INTEGER PRIMARY KEY,
     nombre TEXT NOT NULL,
@@ -57,12 +93,14 @@ CREATE TABLE IF NOT EXISTS estudiantes (
     correo TEXT UNIQUE
 );
 
+-- Dominio Académico: Oferta de cursos con duración en horas
 CREATE TABLE IF NOT EXISTS cursos (
     id INTEGER PRIMARY KEY,
     nombre TEXT NOT NULL UNIQUE,
     duracion INTEGER NOT NULL CHECK (duracion > 0)
 );
 
+-- Dominio Académico: Inscripciones de estudiantes en cursos
 CREATE TABLE IF NOT EXISTS matriculas (
     estudiante_id INTEGER NOT NULL REFERENCES estudiantes(id),
     curso_id INTEGER NOT NULL REFERENCES cursos(id),
@@ -70,6 +108,7 @@ CREATE TABLE IF NOT EXISTS matriculas (
     PRIMARY KEY (estudiante_id, curso_id)
 );
 
+-- Dominio Académico: Calificaciones obtenidas (0 a 100)
 CREATE TABLE IF NOT EXISTS resultados (
     estudiante_id INTEGER NOT NULL REFERENCES estudiantes(id),
     curso_id INTEGER NOT NULL REFERENCES cursos(id),
@@ -77,11 +116,13 @@ CREATE TABLE IF NOT EXISTS resultados (
     PRIMARY KEY (estudiante_id, curso_id)
 );
 
+-- Dominio RRHH: Áreas de la empresa
 CREATE TABLE IF NOT EXISTS departamentos (
     id INTEGER PRIMARY KEY,
     nombre TEXT NOT NULL UNIQUE
 );
 
+-- Dominio RRHH: Nómina de empleados
 CREATE TABLE IF NOT EXISTS empleados (
     id INTEGER PRIMARY KEY,
     nombre TEXT NOT NULL,
@@ -89,6 +130,10 @@ CREATE TABLE IF NOT EXISTS empleados (
     salario REAL NOT NULL CHECK (salario >= 0),
     fecha_contratacion TEXT NOT NULL
 );
+
+-- =============================================================================
+-- 2. DATOS SEMILLA (DML - Data Manipulation Language)
+-- =============================================================================
 
 INSERT OR IGNORE INTO categorias (id, nombre) VALUES
     (1, 'Libros'),
