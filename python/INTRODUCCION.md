@@ -1,38 +1,47 @@
-# Introduccion a Python
+# Introducción a Python
 
-## Que es Python
+## Qué es Python
 
-Python es un lenguaje de programacion de proposito general conocido por una sintaxis legible. Se utiliza en automatizacion, desarrollo web, analisis de datos, inteligencia artificial, ciencia, educacion y muchas otras areas.
+Python es un lenguaje de programación de propósito general conocido por su sintaxis legible. Se utiliza en automatización, desarrollo web, análisis de datos, inteligencia artificial, ciencia, educación y muchas otras áreas. La implementación de referencia, **CPython**, compila tu código a *bytecode* y lo ejecuta en una máquina virtual; en este curso aprenderás cómo funciona por dentro para escribir código correcto y eficiente.
 
-## Para que se utiliza
+Dos ideas te acompañarán durante todo el curso:
 
-- Aprender logica y fundamentos de programacion.
-- Automatizar tareas y procesar archivos.
-- Crear aplicaciones y servicios web.
-- Analizar datos y construir herramientas de ciencia de datos.
-- Desarrollar proyectos de inteligencia artificial y aprendizaje automatico.
+- **Todo es un objeto** y las variables son nombres que apuntan a objetos (no cajas que los contienen).
+- **Tipado dinámico pero fuerte**: el tipo pertenece al valor y Python no convierte tipos a escondidas (`"3" + 4` es un error).
+
+## Para qué se utiliza
+
+- Aprender lógica y fundamentos de programación.
+- Automatizar tareas y procesar archivos (Excel, CSV, PDF, correos).
+- Crear aplicaciones y servicios web (Django, FastAPI, Flask).
+- Analizar datos y construir herramientas de ciencia de datos (pandas, NumPy).
+- Desarrollar proyectos de inteligencia artificial y aprendizaje automático.
 
 ## Herramientas necesarias
 
-1. **Python 3**: interprete que ejecuta archivos `.py`.
-2. **Visual Studio Code**: editor para escribir, ejecutar y depurar codigo.
-3. **Extension Python de Microsoft**: integra ejecucion, depuracion y seleccion del interprete en VS Code.
-4. **Pylance**: mejora el autocompletado y los diagnosticos; se instala junto con la extension Python en muchos casos.
+1. **Python 3.12 o superior**: intérprete que ejecuta archivos `.py`. Algunos ejemplos usan novedades recientes (`itertools.batched`, mejoras de f-strings).
+2. **Visual Studio Code**: editor para escribir, ejecutar y depurar código.
+3. **Extensión Python de Microsoft**: integra ejecución, depuración y selección del intérprete en VS Code.
+4. **Pylance**: mejora el autocompletado y verifica los *type hints*.
 5. **Terminal de Windows**: permite ejecutar directamente los programas.
 
-Los ejercicios de fundamentos no requieren paquetes de terceros. Un entorno virtual se vuelve util mas adelante, cuando un proyecto necesite librerias externas.
+Los ejercicios no requieren paquetes de terceros. Un entorno virtual (`python -m venv .venv`) se vuelve útil cuando un proyecto necesita librerías externas, por ejemplo `pytest`, `mypy` o `ruff`, que se recomiendan en algunos retos avanzados.
 
-## Como funciona un programa Python
+## Cómo funciona un programa Python
 
-Guarda el codigo en un archivo `.py`. La indentacion delimita los bloques y `print` muestra informacion:
+Guarda el código en un archivo `.py`. La indentación (4 espacios) delimita los bloques y `print` muestra información:
 
 ```python
 nombre = "Ana"
 print(f"Hola, {nombre}")
 ```
 
-Desde la raiz del proyecto ejecuta `python python\01_variables.py`. Si `python` no esta configurado en Windows, puedes probar `py python\01_variables.py`. La carpeta contiene 24 temas numerados; empieza por el 01 y avanza en orden.
+Desde la raíz del proyecto ejecuta `python python\01_variables.py`. Si `python` no está configurado en Windows, prueba `py python\01_variables.py`.
+
+## Cómo están organizados los temas
+
+La carpeta contiene 30 temas numerados, del `01` al `30`, agrupados en cuatro fases (fundamentos, estructuras y sistema, POO y algoritmia, ingeniería avanzada). Cada archivo explica el tema en seis secciones dentro de un docstring y termina con diez retos progresivos para resolver en la zona de trabajo.
 
 ## Siguiente paso
 
-Continua con la [guia para instalar Python y configurar VS Code en Windows](./INSTALACION.md) y luego practica con los archivos tematicos de este directorio.
+Continúa con la [guía para instalar Python y configurar VS Code en Windows](./INSTALACION.md) y luego sigue el [plan de estudios](./README.md).
